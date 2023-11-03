@@ -1,44 +1,64 @@
-public class Game {
+import java.util.Arrays;
+import java.util.Random;
 
-    public String winner(String[] deckSteve, String[] deckJosh) {
-        int scoreSteve = 0;
-        int scoreJosh = 0;
+public class Main {
+    private String winner(String[] deckSteve, String[] deckJosh) {
+        int puntosSteve = 0;
+        int puntosJosh = 0;
 
-        // Mapeo de cartas a valores numéricos
-        String cardValues = "23456789TJQKA";
+        for (int i = 0; i < 3; i++) {
+            char cartaSteve = deckSteve[i].charAt(0);
+            char cartaJosh = deckJosh[i].charAt(0);
 
-        for (int i = 0; i < deckSteve.length; i++) {
-            char cardSteve = deckSteve[i].charAt(0);
-            char cardJosh = deckJosh[i].charAt(0);
-
-            int valueSteve = cardValues.indexOf(cardSteve);
-            int valueJosh = cardValues.indexOf(cardJosh);
-
-            if (valueSteve == valueJosh) {
-                // It's a tie; do nothing
+            if (cartaSteve == 'A' && cartaJosh == 'K') {
+                puntosSteve++;
+            } else if (cartaSteve == 'A' && cartaJosh == 'Q') {
+                puntosSteve++;
+            } else if (cartaSteve == 'A' && cartaJosh == 'J') {
+                puntosSteve++;
+            } else if (cartaSteve == 'A' && cartaJosh == 'T') {
+                puntosSteve++;
+            } else if (cartaSteve > cartaJosh) {
+                puntosSteve++;
             } else {
-                if (valueSteve > valueJosh) {
-                    scoreSteve++;
-                } else {
-                    scoreJosh++;
-                }
+                puntosJosh++;
             }
         }
 
-        if (scoreSteve > scoreJosh) {
-            return "Steve wins " + scoreSteve + " to " + scoreJosh;
-        } else if (scoreJosh > scoreSteve) {
-            return "Josh wins " + scoreJosh + " to " + scoreSteve;
+        if (puntosSteve > puntosJosh) {
+            return "Steve wins " + puntosSteve + " to " + puntosJosh;
+        } else if (puntosJosh > puntosSteve) {
+            return "Josh wins " + puntosJosh + " to " + puntosSteve;
         } else {
-            return "Tie";
+            return "El juego termina en empate " + puntosSteve + " a " + puntosJosh;
         }
     }
 
     public static void main(String[] args) {
-        Game game = new Game();
-        String[] deckSteve = { "A", "7", "8" };
-        String[] deckJosh = { "K", "5", "9" };
-        String result = game.winner(deckSteve, deckJosh);
-        System.out.println(result);
+        char[] cartas = {'2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'};
+        String[] Steve = new String[3];
+        String[] Josh = new String[3];
+        Random rand = new Random();
+
+        for (int i = 0; i < 3; i++) {
+            int randomIndex = rand.nextInt(cartas.length);
+            Steve[i] = String.valueOf(cartas[randomIndex]);
+            cartas[randomIndex] = cartas[cartas.length - 1];
+            cartas = Arrays.copyOf(cartas, cartas.length - 1);
+        }
+
+        for (int i = 0; i < 3; i++) {
+            int randomIndex = rand.nextInt(cartas.length);
+            Josh[i] = String.valueOf(cartas[randomIndex]);
+            cartas[randomIndex] = cartas[cartas.length - 1];
+            cartas = Arrays.copyOf(cartas, cartas.length - 1);
+        }
+
+        System.out.println("Cartas de Steve: " + Arrays.toString(Steve));
+        System.out.println("Cartas de Josh: " + Arrays.toString(Josh));
+
+        Main game = new Main();
+        String resultado = game.winner(Steve, Josh);
+        System.out.println(resultado);
     }
 }
